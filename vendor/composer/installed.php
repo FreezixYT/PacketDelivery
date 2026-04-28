@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'root/www',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'db3fe88742efdcb99d38a2c96a1eec5af3899dca',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -104,9 +104,9 @@
             'dev_requirement' => false,
         ),
         'root/www' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'db3fe88742efdcb99d38a2c96a1eec5af3899dca',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
