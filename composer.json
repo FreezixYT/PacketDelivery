@@ -1,0 +1,21 @@
+{
+    "name": "root/www",
+    "type": "project",
+    "require": {
+        "slim/slim": "^4.15",
+        "slim/psr7": "^1.8",
+        "slim/php-view": "^3.4"
+    },
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Root\\Www\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "freezix"
+        }
+    ],
+    "minimum-stability": "stable"
+}
