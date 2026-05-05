@@ -7,6 +7,7 @@
     <title><?= $title ?></title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body>
@@ -18,9 +19,9 @@
             <img src="./assets/img/array.png" width="50px" height="50px" alt="">
         </div>
         <div class="navbar-end">
-            <button class="btn btn-ghost btn-circle">
+            <a href="/login" class="btn btn-ghost btn-circle">
                 <img src="./assets/img/on-off-button.png" width="100px" height="100px" alt="">
-            </button>
+            </a>
         </div>
     </div>
     <main>
