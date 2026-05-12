@@ -1,25 +1,15 @@
 <?php
 
 namespace Root\Www\Model;
-
-use DateTime;
 use PDO;
 use PDOException;
 
-class User extends Database
+class Paquet extends Database
 {
     public string $numeroPostal;
     public string $nomDestinataire;
     public string $prenomDestinataire;
     public string $adresseDestinataire;
-    public float $latitudeAdresse;
-    public float $longitudeAdresse;
-    public DateTime $dateLivraison;
-    public object $ordreRouteLivraison;
-    public string $statutLivraison;
-    public int $routeLivraison_id;
-    public int $employe_livreur_id;
-
 
 
 
@@ -29,7 +19,6 @@ class User extends Database
         $nomDestinataire = $this->nomDestinataire;
         $prenomDestinataire = $this->prenomDestinataire;
         $adresseDestinataire = $this->adresseDestinataire;
-        $estLivreur = $this->estLivreur;
     }
 
     //Recuper l'utilisateur et renvoie l'utilisateur si le mot de pass est just

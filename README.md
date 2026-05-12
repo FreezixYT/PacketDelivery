@@ -13,3 +13,9 @@
 ### 05.05.2026
 * Crée la page de admin home
 9h-10h : Visite chez les technicien
+
+
+# 12.05.2026
+* Ajout modal formulair colie
+* Ajout model packet
+* Ajout shema verification paquet 
