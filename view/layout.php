@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div class="fixed navbar bg-base-100 shadow-sm">
+    <div class="navbar bg-base-100 shadow-sm">
         <div class="navbar-start">
             <a class="text-xl">
                 <?php  
