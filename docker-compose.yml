@@ -11,6 +11,12 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=deliveryPackage
+      - MYSQL_USER=cfpt
+      - MYSQL_PASSWORD=Super
+      - MYSQL_HOST=db
 
   db:
     image: mariadb:10.11

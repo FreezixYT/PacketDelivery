@@ -27,6 +27,7 @@ class HomeController
 
         $data = [
             'title' => 'Login',
+            'errors' => ''
         ];
 
         return $view->render($response, 'login.php', $data);

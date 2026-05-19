@@ -2,49 +2,50 @@
 
 namespace Root\Www\Model;
 
-use DateTime;
 use PDO;
-use PDOException;
+use Root\Www\Schema\UserLogin;
 
 class User extends Database
 {
-    public string $numeroPostal;
-    public string $nomDestinataire;
-    public string $prenomDestinataire;
-    public string $adresseDestinataire;
-    public float $latitudeAdresse;
-    public float $longitudeAdresse;
-    public DateTime $dateLivraison;
-    public object $ordreRouteLivraison;
-    public string $statutLivraison;
-    public int $routeLivraison_id;
-    public int $employe_livreur_id;
-
-
-
+    private PDO $pdo;
 
     public function __construct()
     {
-        $numeroPostal = $this->numeroPostal;
-        $nomDestinataire = $this->nomDestinataire;
-        $prenomDestinataire = $this->prenomDestinataire;
-        $adresseDestinataire = $this->adresseDestinataire;
-        $estLivreur = $this->estLivreur;
+        $this->pdo = Database::getConnection();
     }
 
-    //Recuper l'utilisateur et renvoie l'utilisateur si le mot de pass est just
-    function login()
+    public function getAll()
     {
+        $sql = "SELECT id, nom, prenom, email, estLivreur FROM Employe";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+    public function getByEmail(string $email)
+    {
+        $sql = "SELECT id, nom, prenom, email, estLivreur FROM Employe WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch();
+    }
+
+    public function login(UserLogin $user): array|false
+    {
         $sql = "SELECT * FROM Employe WHERE email = :email";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute(['email' => $this->email]);
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            'email' => $user->email
+        ]);
+
         $response = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($response && password_verify($this->$motDePass, $response['motDePasse']))
-        {
+
+        if ($response && password_verify($user->password, $response['motDePasse'])) {
             return $response;
         }
 
+        return false;
     }
 }

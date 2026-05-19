@@ -19,3 +19,7 @@
 * Ajout modal formulair colie
 * Ajout model packet
 * Ajout shema verification paquet 
+
+# 19.05.2026
+* Ajout schema login
+* System de login fonctionel

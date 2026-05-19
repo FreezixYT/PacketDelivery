@@ -1,6 +1,6 @@
 <div class="flex flex-col bg-color-red items-center min-h-screen">
     <h1 class="text-xl mt-40 mb-5">Connection</h1>
-    <form class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4">
+    <form method="post" action="/login" class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4">
         <fieldset class="fieldset">
             <label class="label">Email</label>
             <label class="input validator">
@@ -10,7 +10,7 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </g>
                 </svg>
-                <input type="text" required placeholder="Email" />
+                <input type="text" name="email" required placeholder="Email" />
             </label>
         </fieldset>
         <label class="fieldset">
@@ -23,10 +23,17 @@
                         <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                 </svg>
-                <input type="password" required placeholder="Password" />
+                <input type="password" name="password" required placeholder="Password" />
             </label>
         </label>
         <span id="error" class="validator-hint hidden">Required</span>
+        <?php if (!empty($errors)) : ?>
+                <ul style="color:red;">
+                    <?php foreach ($errors as $error) : ?>
+                        <li><?= htmlspecialchars($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         <button class="btn btn-neutral mt-4" type="submit">Login</button>
     </form>
 </div>

@@ -35,3 +35,19 @@ CREATE TABLE Paquet (
     CONSTRAINT fk_paquet_livreur
         FOREIGN KEY (employe_livreur_id) REFERENCES Employe(id)
 );
+
+-- Les donnée des utilisateur on été générer par chatgpt, et tout les mot des passe sont super
+
+INSERT INTO Employe (nom, prenom, email, motDePasse, estLivreur) VALUES
+
+-- ADMINS
+('Freezix', 'dev', 'freezix.dev@gmail.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 0),
+('Martin', 'Sophie', 'sophie.martin@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 0),
+('Bernard', 'Thomas', 'thomas.bernard@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 0),
+
+-- EMPLOYÉS / LIVREURS
+('Petit', 'Jean', 'jean@freezix.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 1),
+('Robert', 'Emma', 'emma.robert@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 1),
+('Richard', 'Hugo', 'hugo.richard@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 1),
+('Durand', 'Chloé', 'chloe.durand@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 1),
+('Dujardin', 'Nathan', 'nathan.Dujardin@company.com', '$2y$12$CR/T9RletfIdxBLL5GjLKe2ueDHS5iPVMP6yOee198PLNq9IUpI3C', 1);

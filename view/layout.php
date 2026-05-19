@@ -11,9 +11,20 @@
 </head>
 
 <body>
-    <div class="navbar bg-base-100 shadow-sm">
+    <div class="fixed navbar bg-base-100 shadow-sm">
         <div class="navbar-start">
-            <a class="text-xl">Bonjour Nathan</a>
+            <a class="text-xl">
+                <?php  
+                    if (empty($_SESSION['user']['nom']))
+                    {
+                        echo "<p> Bonjour</p>";
+                    }
+                    else
+                    {
+                        echo "<p> Bonjour " . $_SESSION['user']['nom'];
+                    }
+                    ?>
+            </a>
         </div>
         <div class="navbar-center">
             <img src="./assets/img/array.png" width="50px" height="50px" alt="">

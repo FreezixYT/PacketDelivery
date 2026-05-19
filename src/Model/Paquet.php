@@ -6,6 +6,7 @@ use PDOException;
 
 class Paquet extends Database
 {
+
     public string $numeroPostal;
     public string $nomDestinataire;
     public string $prenomDestinataire;
