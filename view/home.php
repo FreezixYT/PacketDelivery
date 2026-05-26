@@ -31,6 +31,7 @@
 </script>
 
 <?php
+
 foreach ($paquets as $paquet)
 {
 ?>

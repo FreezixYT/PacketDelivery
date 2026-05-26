@@ -1,3 +1,7 @@
+<?php
+session_destroy();
+?>
+
 <div class="flex flex-col bg-color-red items-center min-h-screen">
     <h1 class="text-xl mt-40 mb-5">Connection</h1>
     <form method="post" action="/login" class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4">

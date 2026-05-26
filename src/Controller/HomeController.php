@@ -1,4 +1,5 @@
 <?php
+
 namespace Root\Www\Controller;
 
 use Root\Www\Model\Paquet;
@@ -14,15 +15,24 @@ class HomeController
         $view = new PhpRenderer("../view");
         $view->setLayout("layout.php");
 
-        $paquet = new Paquet();
-        $listPaquet = $paquet->getCoByRoute(1);
+        if (!$_SESSION['user']['estLivreur']) {
+            $paquet = new Paquet();
+            $listPaquet = $paquet->getCoByRoute(1);
 
-        $data = [
-            'title' => 'Home',
-            'paquets' => $listPaquet
-        ];
+            $data = [
+                'title' => 'Home',
+                'paquets' => $listPaquet
+            ];
 
-        return $view->render($response, 'home.php', $data);
+            return $view->render($response, 'home.php', $data);
+        } 
+        else {
+            $data = [
+                'title' => 'Login',
+            ];
+
+            return $view->render($response, 'adminHome.php', $data);
+        }
     }
 
     public function displayLogin(Request $request, Response $response, array $args): Response
@@ -37,17 +47,4 @@ class HomeController
 
         return $view->render($response, 'login.php', $data);
     }
-
-    public function displayAdminHome(Request $request, Response $response, array $args): Response
-    {
-        $view = new PhpRenderer("../view");
-        $view->setLayout("layout.php");
-
-        $data = [
-            'title' => 'Login',
-        ];
-
-        return $view->render($response, 'adminHome.php', $data);
-    }
-
 }

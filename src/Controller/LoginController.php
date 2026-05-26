@@ -32,7 +32,7 @@ class LoginController
                 {
                     $dataUser = $user->getByEmail($userData->email);
                     $_SESSION["user"] = $dataUser;
-                    return $response->withHeader('Location', '/adminHome')->withStatus(302);
+                    return $response->withHeader('Location', '/')->withStatus(302);
                 } 
                 else 
                 {
