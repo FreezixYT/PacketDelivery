@@ -5,6 +5,7 @@ namespace Root\Www\Controller;
 use Root\Www\Model\Paquet;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Root\Www\Model\User;
 use Slim\Views\PhpRenderer;
 
 
@@ -26,9 +27,18 @@ class HomeController
 
             return $view->render($response, 'home.php', $data);
         } 
-        else {
+        else 
+        {
+            $paquet = new Paquet();
+            $listPaquet = $paquet->getAll();
+
+            $livreur = new User();
+            $listLivreur = $livreur->getAllLivreur();
+
             $data = [
                 'title' => 'Login',
+                'livreurs' => $listLivreur,
+                'paquets' => $listPaquet
             ];
 
             return $view->render($response, 'adminHome.php', $data);

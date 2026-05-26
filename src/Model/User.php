@@ -22,6 +22,14 @@ class User extends Database
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllLivreur()
+    {
+        $sql = "SELECT id, nom, prenom, email, estLivreur FROM Employe WHERE estLivreur = true";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getByEmail(string $email)
     {
         $sql = "SELECT id, nom, prenom, email, estLivreur FROM Employe WHERE email = :email";

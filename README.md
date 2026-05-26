@@ -25,4 +25,6 @@
 * System de login fonctionel
 
 # 26.05.2026
-*
+* Ajout map dynamqieu avec marker sur les adresse des colie a livrer
+* Ajout middleware sur les route ou le login est obligatoir
+* Ajout list des paquet et des livreur dynamique
