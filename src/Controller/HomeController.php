@@ -1,6 +1,7 @@
 <?php
 namespace Root\Www\Controller;
 
+use Root\Www\Model\Paquet;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\PhpRenderer;
@@ -13,8 +14,12 @@ class HomeController
         $view = new PhpRenderer("../view");
         $view->setLayout("layout.php");
 
+        $paquet = new Paquet();
+        $listPaquet = $paquet->getCoByRoute(1);
+
         $data = [
             'title' => 'Home',
+            'paquets' => $listPaquet
         ];
 
         return $view->render($response, 'home.php', $data);

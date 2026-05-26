@@ -7,45 +7,50 @@
     <div class="absolute h-200 w-200" id="map"></div>
 </div>
 
-    <script>
-        var map = L.map('map').setView([0,0],1)
 
-        var leafletIcon = L.icon ({
-            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-            iconSeize: [38,95],
-            iconAnchor: [22,94],
-        })
 
-        L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=jEq1W2MCGWJIfonXJrwc', {
-            attribution:'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors </a>',
+<script>
+    var map = L.map('map', {
+        center: [46.2017576, 6.1275494],
+        zoom: 13
+    });
 
-        }).addTo(map);
+    var points = [];
 
-        var marker = L.marker([46, 6],{icon:leafletIcon}).addTo(map);
+    function addPaquets(numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, latitudeAdresse, longitudeAdresse, statutLivraison)
+    {
+        L.marker([latitudeAdresse, longitudeAdresse]).addTo(map).bindPopup("<h1>" + prenomDestinataire + " " + nomDestinataire + "<br>" + adresseDestinataire +"<br> Status : " + statutLivraison);
+        points.push([latitudeAdresse, longitudeAdresse]);
+    }
 
-        var circle = L.circle([46, 6], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            raduis:500
-        }).addTo(map);
 
-        var polygon = L.polygon([
-        [46.209045, 6.191841],
-        [46.208986, 6.191946],
-        [46.208807, 6.191727],
-        [46.208867, 6.191626],
-        [46.208914, 6.191683],
-        [46.208889, 6.191729],
-        [46.208925, 6.191778],
-        [46.208954, 6.191729]
-        ]).addTo(map);
+    L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=jEq1W2MCGWJIfonXJrwc', {
+        attribution: '<a href="https://freezix.com/" target="_blank">Paquet Delivery</a> | <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors </a>',
 
-        marker.bindPopup('<h1>Hey freezix</h1><br><p>I am a marker</p>').openPopup();
+    }).addTo(map);
+</script>
 
-        /*
-        var myGeoJSON = {dataa}
-        //FETCH https://router.project-osrm.org/route/v1/driving/6.1432,46.2044;6.6323,46.5197?overview=full&geometries=geojson
-        L.geoJSON(myGeoJSON).addTo(map);
-        */
-    </script>
+<?php
+foreach ($paquets as $paquet)
+{
+?>
+<script>
+    addPaquets(
+        <?= json_encode($paquet['numeroPostal']) ?>,
+        <?= json_encode($paquet['nomDestinataire']) ?>,
+        <?= json_encode($paquet['prenomDestinataire']) ?>,
+        <?= json_encode($paquet['adresseDestinataire']) ?>,
+        <?= json_encode($paquet['latitudeAdresse']) ?>,
+        <?= json_encode($paquet['longitudeAdresse']) ?>,
+        <?= json_encode($paquet['statutLivraison']) ?>
+    );
+</script>
+<?php
+}
+?>
+<script>
+    L.polyline(points, {
+        color: 'blue',
+        weight: 4
+    }).addTo(map);
+</script>

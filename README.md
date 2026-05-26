@@ -23,3 +23,6 @@
 # 19.05.2026
 * Ajout schema login
 * System de login fonctionel
+
+# 26.05.2026
+*

@@ -1,40 +1,31 @@
 <?php
 
 namespace Root\Www\Model;
+
 use PDO;
-use PDOException;
 
 class Paquet extends Database
 {
-
-    public string $numeroPostal;
-    public string $nomDestinataire;
-    public string $prenomDestinataire;
-    public string $adresseDestinataire;
-
-
+    private PDO $pdo;
 
     public function __construct()
     {
-        $numeroPostal = $this->numeroPostal;
-        $nomDestinataire = $this->nomDestinataire;
-        $prenomDestinataire = $this->prenomDestinataire;
-        $adresseDestinataire = $this->adresseDestinataire;
+        $this->pdo = Database::getConnection();
     }
 
-    //Recuper l'utilisateur et renvoie l'utilisateur si le mot de pass est just
-    function login()
+    public function getAll()
     {
+        $sql = "SELECT * FROM Employe";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        $sql = "SELECT * FROM Employe WHERE email = :email";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute(['email' => $this->email]);
-        $response = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($response && password_verify($this->$motDePass, $response['motDePasse']))
-        {
-            return $response;
-        }
-
+    public function getCoByRoute(int $routeLivraison_id)
+    {
+        $sql = "SELECT * FROM Paquet WHERE routeLivraison_id = :routeLivraison_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['routeLivraison_id' => $routeLivraison_id]);
+        return $stmt->fetchAll();
     }
 }
