@@ -28,3 +28,7 @@
 * Ajout map dynamqieu avec marker sur les adresse des colie a livrer
 * Ajout middleware sur les route ou le login est obligatoir
 * Ajout list des paquet et des livreur dynamique
+
+# 02.06.25
+* Ajout coordonner au schema de verification des packets
+* Ajout fonction create dans la base de donner

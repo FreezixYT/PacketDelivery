@@ -16,7 +16,7 @@ class HomeController
         $view = new PhpRenderer("../view");
         $view->setLayout("layout.php");
 
-        if (!$_SESSION['user']['estLivreur']) {
+        if ($_SESSION['user']['estLivreur']) {
             $paquet = new Paquet();
             $listPaquet = $paquet->getCoByRoute(1);
 
@@ -43,18 +43,5 @@ class HomeController
 
             return $view->render($response, 'adminHome.php', $data);
         }
-    }
-
-    public function displayLogin(Request $request, Response $response, array $args): Response
-    {
-        $view = new PhpRenderer("../view");
-        $view->setLayout("layout.php");
-
-        $data = [
-            'title' => 'Login',
-            'errors' => ''
-        ];
-
-        return $view->render($response, 'login.php', $data);
     }
 }

@@ -45,4 +45,17 @@ class LoginController
             'errors' => $errors
         ]);
     }
+    
+    public function displayLogin(Request $request, Response $response, array $args): Response
+    {
+        $view = new PhpRenderer("../view");
+        $view->setLayout("layout.php");
+
+        $data = [
+            'title' => 'Login',
+            'errors' => ''
+        ];
+
+        return $view->render($response, 'login.php', $data);
+    }
 }

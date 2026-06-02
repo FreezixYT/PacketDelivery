@@ -6,6 +6,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Root\Www\Schema\PaquetsValide;
 use Slim\Views\PhpRenderer;
+use Root\Www\Model\Paquet;
+use Root\Www\Model\User;
+
 
 class PaquetController
 {
@@ -16,17 +19,28 @@ class PaquetController
 
         $data = $request->getParsedBody();
 
-        $paquet = new PaquetsValide($data);
-        $errors = $paquet->validate();
+        $paquetValide = new PaquetsValide($data);
+        $errors = $paquetValide->validate();
 
-        if (empty($errors)) {
+        if (empty($errors)) 
+        {
+            $paquet = new Paquet($data);
+            $paquet->create($data);
 
             return $response
-                ->withHeader('Location', '/adminHome')
+                ->withHeader('Location', '/')
                 ->withStatus(302);
         } else {
+            $paquet = new Paquet();
+            $listPaquet = $paquet->getAll();
+
+            $livreur = new User();
+            $listLivreur = $livreur->getAllLivreur();
+
             return $view->render($response, 'adminHome.php', [
-                'errors' => $errors
+                'errors' => $errors,
+                'paquets' => $listPaquet,
+                'livreurs' => $listLivreur
             ]);
         }
     }

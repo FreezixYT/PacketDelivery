@@ -13,7 +13,7 @@ $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
 
 $app->get('/', [HomeController::class, 'displayHome'])->add(AuthMiddleware::class);
-$app->get('/login', [HomeController::class, 'displayLogin']);
+$app->get('/login', [LoginController::class, 'displayLogin']);
 
 //Paquets
 $app->post('/addPaquets', [PaquetController::class, 'addPaquets']);
