@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-2">
             <h2 class="text-sm text-center text-gray-500">Paquets</h2>
             <input class="input input-bordered input-sm w-full" type="text" />
-            <ul class="menu menu-compact border border-base-300 rounded-lg p-0">
+            <ul class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
                 <?php
                 foreach ($paquets as $paquet) { ?>
 
@@ -21,7 +21,7 @@
         <div class="flex flex-col gap-2">
             <h2 class="text-sm text-center text-gray-500">Livreurs</h2>
             <input class="input input-bordered input-sm w-full" type="text" />
-            <ul class="menu menu-compact border border-base-300 rounded-lg p-0">
+            <ul class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
                 <?php
                 foreach ($livreurs as $livreur) { ?>
 
@@ -40,7 +40,7 @@
 <dialog id="my_modal_1" class="modal" <?= $_SERVER["REQUEST_METHOD"] == "POST" ? "open" : "" ?>>
     <div class="modal-box">
         <h3 class="text-lg font-bold">Ajouter un packet</h3>
-        <form class="fieldset">
+        <form class="fieldset" action="/paquet/add" method="POST">
             <label class="label">Code Postal</label>
             <input type="text" placeholder="1223" name="numeroPostal" class="input  w-full" />
 
@@ -114,8 +114,8 @@
                 const response = await fetchCoordonee(adresseDestinataire.value);
 
                 if (response.features && response.features.length > 0) {
-                    let lat = response.features[0].geometry.coordinates[0];
-                    let lon = response.features[0].geometry.coordinates[1];
+                    let lon = response.features[0].geometry.coordinates[0];
+                    let lat = response.features[0].geometry.coordinates[1]; 
 
                     latitudeAdresse.value = lat;
                     longitudeAdresse.value = lon;

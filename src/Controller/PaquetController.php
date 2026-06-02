@@ -24,7 +24,7 @@ class PaquetController
 
         if (empty($errors)) 
         {
-            $paquet = new Paquet($data);
+            $paquet = new Paquet();
             $paquet->create($data);
 
             return $response

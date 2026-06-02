@@ -30,6 +30,21 @@ class User extends Database
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllFreeLivreur(string $date)
+    {
+        $sql = "SELECT e.id, e.nom, e.prenom, e.email, e.estLivreur 
+                FROM Employe e
+                WHERE e.estLivreur = true 
+                AND (
+                    SELECT COUNT(*) FROM Paquet p 
+                    WHERE p.employe_livreur_id = e.id 
+                    AND p.dateLivraison = :date
+                ) < 10";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['date' => $date]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getByEmail(string $email)
     {
         $sql = "SELECT id, nom, prenom, email, estLivreur FROM Employe WHERE email = :email";

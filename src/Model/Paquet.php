@@ -2,6 +2,7 @@
 
 namespace Root\Www\Model;
 
+use DateTime;
 use PDO;
 
 class Paquet extends Database
@@ -21,6 +22,14 @@ class Paquet extends Database
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getByDate(int $idLivreur, DateTime $dateLivraison)
+    {
+        $sql = "SELECT * FROM Paquet WHERE employe_livreur_id = :employe_livreur_id AND dateLivraison = :dateLivraison";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['employe_livreur_id' => $idLivreur,'dateLivraison' => $dateLivraison->format("Y-m-d")]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getCoByRoute(int $routeLivraison_id)
     {
         $sql = "SELECT * FROM Paquet WHERE routeLivraison_id = :routeLivraison_id";
@@ -31,11 +40,10 @@ class Paquet extends Database
 
     public function create(array $data): bool
     {
-        var_dump($data);
         $sql = "INSERT INTO Paquet 
-        (numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, dateLivraison, idLivreur) 
+        (numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, latitudeAdresse, longitudeAdresse, dateLivraison, employe_livreur_id) 
         VALUES 
-        (:numeroPostal, :nomDestinataire, :prenomDestinataire, :adresseDestinataire, :dateLivraison, :idLivreur)";
+        (:numeroPostal, :nomDestinataire, :prenomDestinataire, :adresseDestinataire, :latitudeAdresse, :longitudeAdresse, :dateLivraison, :employe_livreur_id)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -44,8 +52,10 @@ class Paquet extends Database
             'nomDestinataire' => $data['nomDestinataire'],
             'prenomDestinataire' => $data['prenomDestinataire'],
             'adresseDestinataire' => $data['adresseDestinataire'],
+            'latitudeAdresse' => $data['latitudeAdresse'],
+            'longitudeAdresse' => $data['longitudeAdresse'],
             'dateLivraison' => $data['dateLivraison'],
-            'idLivreur' => (int)$data['idLivreur']
+            'employe_livreur_id' => (int)$data['idLivreur']
         ]);
     }
 }

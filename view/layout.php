@@ -27,11 +27,11 @@
             </a>
         </div>
         <div class="navbar-center">
-            <img src="./assets/img/array.png" width="50px" height="50px" alt="">
+            <img src="/assets/img/array.png" width="50px" height="50px" alt="">
         </div>
         <div class="navbar-end">
             <a href="/login" class="btn btn-ghost btn-circle">
-                <img src="./assets/img/on-off-button.png" width="100px" height="100px" alt="">
+                <img src="/assets/img/on-off-button.png" width="100px" height="100px" alt="">
             </a>
         </div>
     </div>
