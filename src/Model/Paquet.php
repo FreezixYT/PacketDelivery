@@ -58,4 +58,37 @@ class Paquet extends Database
             'employe_livreur_id' => (int)$data['idLivreur']
         ]);
     }
+
+    public function edit(array $data): bool
+    {
+        $sql = "UPDATE Paquet SET
+            nomDestinataire = :nomDestinataire,
+            prenomDestinataire = :prenomDestinataire,
+            adresseDestinataire = :adresseDestinataire,
+            latitudeAdresse = :latitudeAdresse,
+            longitudeAdresse = :longitudeAdresse,
+            dateLivraison = :dateLivraison,
+            employe_livreur_id = :employe_livreur_id
+        WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            'numeroPostal' => (int)$data['numeroPostal'],
+            'nomDestinataire' => $data['nomDestinataire'],
+            'prenomDestinataire' => $data['prenomDestinataire'],
+            'adresseDestinataire' => $data['adresseDestinataire'],
+            'latitudeAdresse' => $data['latitudeAdresse'],
+            'longitudeAdresse' => $data['longitudeAdresse'],
+            'dateLivraison' => $data['dateLivraison'],
+            'employe_livreur_id' => (int)$data['idLivreur']
+        ]);
+    }
+
+    public function delete(int $id)
+    {
+        $sql = "DELETE FROM Paquet WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
 }

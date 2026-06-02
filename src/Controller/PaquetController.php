@@ -44,4 +44,12 @@ class PaquetController
             ]);
         }
     }
+
+    public function deletePaquet(Request $request, Response $response, array $args): Response
+    {
+        $paquet = new Paquet();
+        $paquet->delete((int)$args['id']);
+    
+        return $response->withHeader('Location', '/')->withStatus(302);
+    }
 }

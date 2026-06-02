@@ -7,14 +7,17 @@
                 <?php
                 foreach ($paquets as $paquet) { ?>
 
-                    <li><a><?= $paquet['id'] ?> <span class="text-gray-400 text-xs">(<?= $paquet['statutLivraison'] ?> )</span></a></li>
+                    <li>
+                        <a onclick="openEditModal(<?= $paquet['id'] ?>)" class="cursor-pointer">
+                            <?= $paquet['id'] ?> <span class="text-gray-400 text-xs">(<?= $paquet['statutLivraison'] ?>)</span>
+                        </a>
+                    </li>
 
                 <?php
                 } ?>
             </ul>
             <div class="flex justify-end gap-2 mt-auto">
-                <button onclick="my_modal_1.showModal()" class="btn btn-circle btn-sm btn-outline"><i class="bi bi-plus-circle"></i></button>
-                <button class="btn btn-circle btn-sm btn-outline"><i class="bi bi-pencil-square"></i></button>
+                <button onclick="my_modal_1.showModal()" class="btn btn-primary w-full">Ajouter</button>
             </div>
         </div>
 
@@ -94,7 +97,55 @@
     </div>
 </dialog>
 
-<script type="module">
+<dialog id="my_modal_2" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Modifier un paquet</h3>
+        <input type="hidden" name="id" id="editId" />
+
+        <label class="label">Nom</label>
+        <input type="text" name="nomDestinataire" id="editNom" class="input w-full" />
+
+        <label class="label">Prénom</label>
+        <input type="text" name="prenomDestinataire" id="editPrenom" class="input w-full" />
+
+        <label class="label">Adresse</label>
+        <input type="text" name="adresseDestinataire" id="editAdresse" class="input w-full" />
+
+        <label class="label">Date de livraison</label>
+        <input type="date" name="dateLivraison" id="editDate" class="input w-full" />
+        <form action="/paquet/edit/<?= $paquet['id'] ?>" method="POST">
+            <button class="w-full btn btn-neutral mt-4" type="submit">Modifier</button>
+        </form>
+        <form action="/paquet/delete/<?= $paquet['id'] ?>" method="POST">
+            <button type="submit" class="w-full btn btn-error">Supprimer</button>
+        </form>
+
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Fermer</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    //Modal edit
+    const paquets = <?= json_encode($paquets) ?>;
+
+    function openEditModal(id) {
+        const paquet = paquets.find(p => p.id == id);
+        if (!paquet) return;
+
+        document.getElementById("editId").value = paquet.id;
+        document.getElementById("editNom").value = paquet.nomDestinataire;
+        document.getElementById("editPrenom").value = paquet.prenomDestinataire;
+        document.getElementById("editAdresse").value = paquet.adresseDestinataire;
+        document.getElementById("editDate").value = paquet.dateLivraison;
+
+        my_modal_2.showModal();
+    }
+    //--------------
+
     const btnConvert = document.getElementById("btnConvert");
     const adresseDestinataire = document.getElementById("adresseDestinataire");
     const errorAdresse = document.getElementById("errorAdresse");
@@ -115,7 +166,7 @@
 
                 if (response.features && response.features.length > 0) {
                     let lon = response.features[0].geometry.coordinates[0];
-                    let lat = response.features[0].geometry.coordinates[1]; 
+                    let lat = response.features[0].geometry.coordinates[1];
 
                     latitudeAdresse.value = lat;
                     longitudeAdresse.value = lon;
