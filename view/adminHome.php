@@ -25,7 +25,7 @@
 
                     <li>
                         <a onclick="openEditModal(<?= $paquet['id'] ?>)" class="cursor-pointer">
-                            <div class="badge badge-primary"><?= $paquet['id'] ?></div> <?= $paquet['numeroPostal'] ?> 
+                            <div class="badge badge-primary"><?= $paquet['id'] ?></div> <?= $paquet['numeroPostal'] ?>
                             <?= $paquet['statutLivraison'] == "en_attente" ? "<div class='badge badge-error'>Pas livré</div>" : ($paquet['statutLivraison'] == "en_cours" ? "<div class='badge badge-warning'>En cours</div>" : "<div class='badge badge-success'>Livré</div>") ?>
                         </a>
                     </li>
@@ -54,8 +54,12 @@
             <ul id="listeLivreurs" class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
                 <?php
                 foreach ($livreurs as $livreur) { ?>
+                    <li>
+                        <a onclick="openLivreurModal(<?= $livreur['id'] ?>)" class="cursor-pointer">
+                            <?= $livreur['prenom'] ?> <?= $livreur['nom'] ?>
+                        </a>
+                    </li>
 
-                    <li><a><?= $livreur['prenom'] ?> <?= $livreur['nom'] ?></a></li>
 
                 <?php
                 } ?>
@@ -172,10 +176,34 @@
     </div>
 </dialog>
 
-<script>
-    //Modal edit
-    const paquets = <?= json_encode($paquets) ?>;
+<!-- Modal livreur-->
+<dialog id="my_modal_3" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold text-center" id="nomLivreur"></h3>
+        <p class="text-gray-400 text-sm text-center mb-4" id="prenomLivreur"></p>
 
+        <label class="label">Journée de livraison</label>
+        <input type="date" id="inputDateLivreur" class="input input-bordered w-full mb-4" />
+
+        <h4 class="text-sm text-gray-500 mb-2">Paquets a livre</h4>
+        <ul id="listePaquetsLivreur" class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
+            <li class="text-gray-400 text-sm p-2 text-center" id="emptyMessage">Sélectionnez une date</li>
+
+        </ul>
+
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Fermer</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    const paquets = <?= json_encode($paquets) ?>;
+    const livreurs = <?= json_encode($livreurs) ?>;
+
+    //Modal edit
     function openEditModal(id) {
         const paquet = paquets.find(p => p.id == id);
 
@@ -192,6 +220,45 @@
         document.getElementById("formDelete").action = `/paquet/delete/${paquet.id}`;
 
         my_modal_2.showModal();
+    }
+
+    function openLivreurModal(id) {
+        const livreur = livreurs.find(p => p.id == id);
+
+        document.getElementById("nomLivreur").innerText = livreur.prenom + " " + livreur.nom;
+
+        afficherPaquetsLivreur(id, document.getElementById("inputDateLivreur").value);
+
+        document.getElementById("inputDateLivreur").onchange = function() {
+            afficherPaquetsLivreur(id, this.value);
+        };
+
+        my_modal_3.showModal();
+    }
+
+    function afficherPaquetsLivreur(idLivreur, date) {
+        const filtered = paquets.filter(p => p.employe_livreur_id == idLivreur && p.dateLivraison == date);
+        const liste = document.getElementById("listePaquetsLivreur");
+
+        liste.innerHTML = "";
+
+        if (filtered.length === 0) 
+        {
+            liste.innerHTML = '<li class="text-gray-400 text-sm p-2 text-center">Aucun colis ce jour</li>';
+            return;
+        }
+
+        filtered.forEach(p => {
+            liste.innerHTML += `
+            <li>
+                <a>
+                    <div class="badge badge-primary">${p.id}</div>
+                    ${p.numeroPostal} - ${p.prenomDestinataire} ${p.nomDestinataire}
+                    <span class="text-xs ml-auto">${p.statutLivraison}</span>
+                </a>
+            </li>
+        `;
+        });
     }
 
     document.getElementById("btnConvertEdit").addEventListener("click", async () => {

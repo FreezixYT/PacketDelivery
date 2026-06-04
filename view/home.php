@@ -61,7 +61,8 @@
     var points = [];
 
     function addPaquets(numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, latitudeAdresse, longitudeAdresse, statutLivraison) {
-        L.marker([latitudeAdresse, longitudeAdresse]).addTo(map).bindPopup("<h1>" + prenomDestinataire + " " + nomDestinataire + "<br>" + adresseDestinataire + "<br> Status : " + statutLivraison);
+        L.marker([latitudeAdresse, longitudeAdresse]).addTo(map).bindPopup
+        ("<h1>" + prenomDestinataire + " " + nomDestinataire + "<br>" + adresseDestinataire + "<br> Status : " + statutLivraison);
         points.push([latitudeAdresse, longitudeAdresse]);
     }
 

@@ -40,3 +40,6 @@
 * Ajout modification paquet
 * Modification route api, ajout groupe paquet et middleware sur tout les routes
 * Changement des statut de livraison dans le DB et ajout tag visuel en fonction du status de livraison
+
+# 04.06.25
+* Ajout click sur livreur pour voir leur colie livrer sur la page admin
