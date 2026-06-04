@@ -32,3 +32,11 @@
 # 02.06.25
 * Ajout coordonner au schema de verification des packets
 * Ajout fonction create dans la base de donner
+* Ajout suppression paquet
+
+# 03.06.25
+* Ajout filtrage paquet
+* Ajout recherche paquets et livreur
+* Ajout modification paquet
+* Modification route api, ajout groupe paquet et middleware sur tout les routes
+* Changement des statut de livraison dans le DB et ajout tag visuel en fonction du status de livraison

@@ -4,6 +4,7 @@ use Root\Www\Controller\HomeController;
 use Root\Www\Controller\LoginController;
 use Root\Www\Controller\PaquetController;
 use Root\Www\Middleware\AuthMiddleware;
+use Slim\Routing\RouteCollectorProxy;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,9 +19,12 @@ $app->get('/{idLivreur}/{date}/', [HomeController::class, 'displayHome'])->add(A
 $app->get('/login', [LoginController::class, 'displayLogin']);
 
 //Paquets
-$app->post('/paquet/add', [PaquetController::class, 'addPaquets']);
-$app->post('/paquet/edit', [PaquetController::class, 'editPaquet']);
-$app->post('/paquet/delete/{id}', [PaquetController::class, 'deletePaquet']);
+$app->group('/paquet', function (RouteCollectorProxy $group)
+{
+    $group->post('/add', [PaquetController::class, 'addPaquets'])->add(AuthMiddleware::class);
+    $group->post('/edit/{id}', [PaquetController::class, 'editPaquets'])->add(AuthMiddleware::class);
+    $group->post('/delete/{id}', [PaquetController::class, 'deletePaquet'])->add(AuthMiddleware::class);
+});
 
 //login
 $app->post('/login', [LoginController::class, 'login']);

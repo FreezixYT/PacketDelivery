@@ -16,7 +16,7 @@ class Paquet extends Database
 
     public function getAll()
     {
-        $sql = "SELECT * FROM Paquet";
+        $sql = "SELECT * FROM Paquet ORDER BY dateLivraison ASC, numeroPostal ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,9 +59,10 @@ class Paquet extends Database
         ]);
     }
 
-    public function edit(array $data): bool
+    public function edit(int $id, array $data): bool
     {
         $sql = "UPDATE Paquet SET
+            numeroPostal = :numeroPostal,
             nomDestinataire = :nomDestinataire,
             prenomDestinataire = :prenomDestinataire,
             adresseDestinataire = :adresseDestinataire,
@@ -69,12 +70,12 @@ class Paquet extends Database
             longitudeAdresse = :longitudeAdresse,
             dateLivraison = :dateLivraison,
             employe_livreur_id = :employe_livreur_id
-        WHERE id = :id";
-
+            WHERE id = :id";
+    
         $stmt = $this->pdo->prepare($sql);
-
         return $stmt->execute([
-            'numeroPostal' => (int)$data['numeroPostal'],
+            'id' => $id,
+            'numeroPostal' => $data['numeroPostal'],
             'nomDestinataire' => $data['nomDestinataire'],
             'prenomDestinataire' => $data['prenomDestinataire'],
             'adresseDestinataire' => $data['adresseDestinataire'],

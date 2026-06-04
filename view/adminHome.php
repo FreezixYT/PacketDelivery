@@ -2,29 +2,56 @@
     <div class="grid grid-cols-2 gap-8 p-4">
         <div class="flex flex-col gap-2">
             <h2 class="text-sm text-center text-gray-500">Paquets</h2>
-            <input class="input input-bordered input-sm w-full" type="text" />
-            <ul class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
+            <label class="input">
+                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input placeholder="Rechercher un Paquets" id="inputSearchPaquet" type="text" />
+            </label>
+            <div class="flex justify-end gap-2 mt-auto">
+                <button onclick="my_modal_1.showModal()" class="btn btn-primary w-full">Ajouter</button>
+            </div>
+            <ul id="listePaquets" class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
                 <?php
                 foreach ($paquets as $paquet) { ?>
 
                     <li>
                         <a onclick="openEditModal(<?= $paquet['id'] ?>)" class="cursor-pointer">
-                            <?= $paquet['id'] ?> <span class="text-gray-400 text-xs">(<?= $paquet['statutLivraison'] ?>)</span>
+                            <div class="badge badge-primary"><?= $paquet['id'] ?></div> <?= $paquet['numeroPostal'] ?> 
+                            <?= $paquet['statutLivraison'] == "en_attente" ? "<div class='badge badge-error'>Pas livré</div>" : ($paquet['statutLivraison'] == "en_cours" ? "<div class='badge badge-warning'>En cours</div>" : "<div class='badge badge-success'>Livré</div>") ?>
                         </a>
                     </li>
 
                 <?php
                 } ?>
             </ul>
-            <div class="flex justify-end gap-2 mt-auto">
-                <button onclick="my_modal_1.showModal()" class="btn btn-primary w-full">Ajouter</button>
-            </div>
         </div>
 
         <div class="flex flex-col gap-2">
             <h2 class="text-sm text-center text-gray-500">Livreurs</h2>
-            <input class="input input-bordered input-sm w-full" type="text" />
-            <ul class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
+            <label class="input">
+                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input placeholder="Rechercher un livreur" id="inputSearchLivreur" type="text" />
+            </label>
+            <ul id="listeLivreurs" class="w-full menu menu-compact border border-base-300 rounded-lg p-0">
                 <?php
                 foreach ($livreurs as $livreur) { ?>
 
@@ -33,9 +60,6 @@
                 <?php
                 } ?>
             </ul>
-            <div class="flex justify-end mt-auto">
-                <button class="btn btn-circle btn-sm btn-outline"><i class="bi bi-search"></i></button>
-            </div>
         </div>
 
     </div>
@@ -86,6 +110,8 @@
                 </ul>
             <?php endif; ?>
 
+            <?php $error = [] ?>
+
             <button class="btn btn-neutral mt-4" type="submit">Ajouter</button>
 
         </form>
@@ -100,26 +126,44 @@
 <dialog id="my_modal_2" class="modal">
     <div class="modal-box">
         <h3 class="text-lg font-bold">Modifier un paquet</h3>
-        <input type="hidden" name="id" id="editId" />
+        <form id="formEdit" action="/paquet/edit/0" method="POST">
+            <input type="hidden" name="id" id="editId" />
 
-        <label class="label">Nom</label>
-        <input type="text" name="nomDestinataire" id="editNom" class="input w-full" />
+            <label class="label">Code Postal</label>
+            <input type="text" name="numeroPostal" id="editNumeroPostal" class="input w-full" />
 
-        <label class="label">Prénom</label>
-        <input type="text" name="prenomDestinataire" id="editPrenom" class="input w-full" />
+            <label class="label">Nom</label>
+            <input type="text" name="nomDestinataire" id="editNom" class="input w-full" />
 
-        <label class="label">Adresse</label>
-        <input type="text" name="adresseDestinataire" id="editAdresse" class="input w-full" />
+            <label class="label">Prénom</label>
+            <input type="text" name="prenomDestinataire" id="editPrenom" class="input w-full" />
 
-        <label class="label">Date de livraison</label>
-        <input type="date" name="dateLivraison" id="editDate" class="input w-full" />
-        <form action="/paquet/edit/<?= $paquet['id'] ?>" method="POST">
+            <label class="label">Adresse</label>
+            <input type="text" id="editAdresseDestinataire" name="adresseDestinataire" class="input w-full" />
+            <p class="text-red-500" id="editErrorAdresse"></p>
+
+            <label class="label">Coordonnée</label>
+            <div class="flex gap-2">
+                <input type="text" placeholder="longitude" name="longitudeAdresse" id="editLongitudeAdresse" class="input w-30" readonly />
+                <input type="text" placeholder="latitude" name="latitudeAdresse" id="editLatitudeAdresse" class="input w-30" readonly />
+            </div>
+            <button type="button" id="btnConvertEdit" class="btn btn-primary">Convertir l'adresse</button>
+
+            <label class="label">Date de livraison</label>
+            <input type="date" name="dateLivraison" id="editDate" class="input w-full" />
+
+            <label class="label">Livreurs</label>
+            <select class="select select-bordered w-full" name="idLivreur">
+                <?php foreach ($livreurs as $livreur) : ?>
+                    <option value="<?= $livreur['id'] ?>"><?= $livreur['prenom'] ?> <?= $livreur['nom'] ?></option>
+                <?php endforeach; ?>
+            </select>
+
             <button class="w-full btn btn-neutral mt-4" type="submit">Modifier</button>
         </form>
-        <form action="/paquet/delete/<?= $paquet['id'] ?>" method="POST">
-            <button type="submit" class="w-full btn btn-error">Supprimer</button>
+        <form id="formDelete" action="/paquet/delete/0" method="POST">
+            <button type="submit" class="w-full btn btn-error mt-2">Supprimer</button>
         </form>
-
         <div class="modal-action">
             <form method="dialog">
                 <button class="btn">Fermer</button>
@@ -134,17 +178,70 @@
 
     function openEditModal(id) {
         const paquet = paquets.find(p => p.id == id);
-        if (!paquet) return;
 
         document.getElementById("editId").value = paquet.id;
         document.getElementById("editNom").value = paquet.nomDestinataire;
         document.getElementById("editPrenom").value = paquet.prenomDestinataire;
-        document.getElementById("editAdresse").value = paquet.adresseDestinataire;
+        document.getElementById("editNumeroPostal").value = paquet.numeroPostal;
+        document.getElementById("editAdresseDestinataire").value = paquet.adresseDestinataire;
+        document.getElementById("editLatitudeAdresse").value = paquet.latitudeAdresse ?? "";
+        document.getElementById("editLongitudeAdresse").value = paquet.longitudeAdresse ?? "";
         document.getElementById("editDate").value = paquet.dateLivraison;
+
+        document.getElementById("formEdit").action = `/paquet/edit/${paquet.id}`;
+        document.getElementById("formDelete").action = `/paquet/delete/${paquet.id}`;
 
         my_modal_2.showModal();
     }
-    //--------------
+
+    document.getElementById("btnConvertEdit").addEventListener("click", async () => {
+        const adresse = document.getElementById("editAdresseDestinataire").value;
+        const errorAdresse = document.getElementById("editErrorAdresse");
+
+        errorAdresse.innerText = "";
+
+        if (adresse == "") {
+            errorAdresse.innerText = "Erreur : adresse invalide";
+        } else {
+            try {
+                const response = await fetchCoordonee(adresse);
+                if (response.features && response.features.length > 0) {
+                    document.getElementById("editLongitudeAdresse").value = response.features[0].geometry.coordinates[0];
+                    document.getElementById("editLatitudeAdresse").value = response.features[0].geometry.coordinates[1];
+                } else {
+                    errorAdresse.innerText = "Erreur : adresse invalide";
+                }
+            } catch (error) {
+                errorAdresse.innerText = "Erreur de l'api, veuillez réessayer plus tard";
+            }
+        }
+    });
+
+    // -- rechercher un packet --
+    const inputSearchPaquet = document.getElementById("inputSearchPaquet");
+    const listePaquets = document.getElementById("listePaquets");
+
+    inputSearchPaquet.addEventListener("input", () => {
+        const search = inputSearchPaquet.value.toLowerCase();
+
+        listePaquets.querySelectorAll("li").forEach(li => {
+            li.style.display = li.innerText.toLowerCase().includes(search) ? "" : "none";
+        });
+    });
+
+    // -- rechercher un livreur --
+    const inputSearchLivreur = document.getElementById("inputSearchLivreur");
+    const listeLivreurs = document.getElementById("listeLivreurs");
+
+    inputSearchLivreur.addEventListener("input", () => {
+        const search = inputSearchLivreur.value.toLowerCase();
+
+        listeLivreurs.querySelectorAll("li").forEach(li => {
+            li.style.display = li.innerText.toLowerCase().includes(search) ? "" : "none";
+        });
+    });
+
+    // --------
 
     const btnConvert = document.getElementById("btnConvert");
     const adresseDestinataire = document.getElementById("adresseDestinataire");

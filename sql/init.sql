@@ -27,7 +27,7 @@ CREATE TABLE Paquet (
     longitudeAdresse DECIMAL(10, 7),
     dateLivraison DATE,
     ordreRouteLivraison INT,
-    statutLivraison VARCHAR(50)  NOT NULL DEFAULT 'en_attente',
+    statutLivraison ENUM('en_attente', 'en_cours', 'livre') NOT NULL DEFAULT 'en_attente',
     routeLivraison_id INT DEFAULT NULL,
     employe_livreur_id INT NOT NULL,
     CONSTRAINT fk_paquet_route
