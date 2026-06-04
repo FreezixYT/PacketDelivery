@@ -60,9 +60,45 @@
 
     var points = [];
 
-    function addPaquets(numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, latitudeAdresse, longitudeAdresse, statutLivraison) {
-        L.marker([latitudeAdresse, longitudeAdresse]).addTo(map).bindPopup
-        ("<h1>" + prenomDestinataire + " " + nomDestinataire + "<br>" + adresseDestinataire + "<br> Status : " + statutLivraison);
+    function addPaquets(id, numeroPostal, nomDestinataire, prenomDestinataire, adresseDestinataire, latitudeAdresse, longitudeAdresse, statutLivraison) {
+        if (latitudeAdresse === null || longitudeAdresse === null) return;
+
+        const badgeStatut = statutLivraison == "en_attente" ?
+            "<span class='badge badge-error'>Pas livré</span>" :
+            (statutLivraison == "en_cours" ?
+                "<span class='badge badge-warning'>En cours</span>" :
+                "<span class='badge badge-success'>Livré</span>");
+
+        let popup = `<b>${prenomDestinataire} ${nomDestinataire}</b><br> ${adresseDestinataire}<br> N° postal : ${numeroPostal}<br> Statut : ${badgeStatut}<br>`;
+
+        if (statutLivraison != "livre") {
+            popup += `
+                <form action="/paquet/livrer/${id}" method="POST">
+                    <button type="submit" class="btn btn-sm btn-success mt-2">Marquer comme livré</button>
+                </form>
+            `;
+        }
+
+        const blueIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+
+        const greenIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+        const icon = statutLivraison == "livre" ? greenIcon : blueIcon;
+
+        L.marker([latitudeAdresse, longitudeAdresse], {
+            icon: icon
+        }).addTo(map).bindPopup(popup);
         points.push([latitudeAdresse, longitudeAdresse]);
     }
 
@@ -73,11 +109,16 @@
     }).addTo(map);
 </script>
 
+<div>
+
+</div>
+
 <?php
 foreach ($paquets as $paquet) {
 ?>
     <script>
         addPaquets(
+            <?= json_encode($paquet['id']) ?>,
             <?= json_encode($paquet['numeroPostal']) ?>,
             <?= json_encode($paquet['nomDestinataire']) ?>,
             <?= json_encode($paquet['prenomDestinataire']) ?>,

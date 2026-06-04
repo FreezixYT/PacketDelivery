@@ -73,7 +73,7 @@
         <h3 class="text-lg font-bold">Ajouter un packet</h3>
         <form class="fieldset" action="/paquet/add" method="POST">
             <label class="label">Code Postal</label>
-            <input type="text" placeholder="1223" name="numeroPostal" class="input  w-full" />
+            <input type="text" placeholder="1223" id="numeroPostal" name="numeroPostal" class="input  w-full" />
 
             <label class="label">Nom</label>
             <input type="text" placeholder="Nathan" name="nomDestinataire" class="input  w-full" />
@@ -145,14 +145,14 @@
             <label class="label">Adresse</label>
             <input type="text" id="editAdresseDestinataire" name="adresseDestinataire" class="input w-full" />
             <p class="text-red-500" id="editErrorAdresse"></p>
-
+                         
             <label class="label">Coordonnée</label>
             <div class="flex gap-2">
                 <input type="text" placeholder="longitude" name="longitudeAdresse" id="editLongitudeAdresse" class="input w-30" readonly />
                 <input type="text" placeholder="latitude" name="latitudeAdresse" id="editLatitudeAdresse" class="input w-30" readonly />
             </div>
-            <button type="button" id="btnConvertEdit" class="btn btn-primary">Convertir l'adresse</button>
-
+            <button type="button" id="btnConvertEdit" class="btn btn-primary mt-2">Convertir l'adresse</button>
+            <br>   
             <label class="label">Date de livraison</label>
             <input type="date" name="dateLivraison" id="editDate" class="input w-full" />
 
@@ -264,6 +264,7 @@
     document.getElementById("btnConvertEdit").addEventListener("click", async () => {
         const adresse = document.getElementById("editAdresseDestinataire").value;
         const errorAdresse = document.getElementById("editErrorAdresse");
+        const numeroPostal = document.getElementById("editNumeroPostal");
 
         errorAdresse.innerText = "";
 
@@ -271,7 +272,7 @@
             errorAdresse.innerText = "Erreur : adresse invalide";
         } else {
             try {
-                const response = await fetchCoordonee(adresse);
+                const response = await fetchCoordonee(adresse, numeroPostal.value ?? " ");
                 if (response.features && response.features.length > 0) {
                     document.getElementById("editLongitudeAdresse").value = response.features[0].geometry.coordinates[0];
                     document.getElementById("editLatitudeAdresse").value = response.features[0].geometry.coordinates[1];
@@ -312,6 +313,7 @@
 
     const btnConvert = document.getElementById("btnConvert");
     const adresseDestinataire = document.getElementById("adresseDestinataire");
+    const numeroPostal = document.getElementById("numeroPostal");
     const errorAdresse = document.getElementById("errorAdresse");
     const latitudeAdresse = document.getElementById("latitudeAdresse");
     const longitudeAdresse = document.getElementById("longitudeAdresse");
@@ -326,7 +328,7 @@
             errorAdresse.innerText = "Erreur : adress invalide";
         } else {
             try {
-                const response = await fetchCoordonee(adresseDestinataire.value);
+                const response = await fetchCoordonee(adresseDestinataire.value, numeroPostal.value ?? "");
 
                 if (response.features && response.features.length > 0) {
                     let lon = response.features[0].geometry.coordinates[0];
@@ -344,8 +346,8 @@
         }
     })
 
-    async function fetchCoordonee(adresse) {
-        const response = await fetch("https://photon.komoot.io/api/?q=" + adresse);
+    async function fetchCoordonee(adresse, codePostal) {
+        const response = await fetch("https://photon.komoot.io/api/?q=" + adresse + " " + codePostal);
 
         const result = await response.json();
 

@@ -86,6 +86,14 @@ class Paquet extends Database
         ]);
     }
 
+    public function livre(int $id)
+    {
+        $sql = "UPDATE Paquet SET statutLivraison = 'livre' WHERE id = :id";
+    
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
     public function delete(int $id)
     {
         $sql = "DELETE FROM Paquet WHERE id = :id";

@@ -43,3 +43,4 @@
 
 # 04.06.25
 * Ajout click sur livreur pour voir leur colie livrer sur la page admin
+* Ajout status livraison popup

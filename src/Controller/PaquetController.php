@@ -47,39 +47,47 @@ class PaquetController
     }
 
     public function editPaquets(Request $request, Response $response, array $args): Response
-{
-    $view = new PhpRenderer("../view");
-    $view->setLayout("layout.php");
+    {
+        $view = new PhpRenderer("../view");
+        $view->setLayout("layout.php");
 
-    $data = $request->getParsedBody();
-    $id = (int)$args['id'];
+        $data = $request->getParsedBody();
+        $id = (int)$args['id'];
 
-    $paquetValide = new PaquetsValide($data);
-    $errors = $paquetValide->validate();
+        $paquetValide = new PaquetsValide($data);
+        $errors = $paquetValide->validate();
 
-    if (empty($errors)) 
+        if (empty($errors)) 
+        {
+            $paquet = new Paquet();
+            $paquet->edit($id, $data);
+
+            return $response
+                ->withHeader('Location', '/')
+                ->withStatus(302);
+        } else {
+            $paquet = new Paquet();
+            $listPaquet = $paquet->getAll();
+
+            $livreur = new User();
+            $listLivreur = $livreur->getAllLivreur();
+
+            return $view->render($response, 'adminHome.php', [
+                'errors' => $errors,
+                'paquets' => $listPaquet,
+                'livreurs' => $listLivreur,
+                'openModal' => true
+            ]);
+        }
+    }
+
+    public function livrerPaquet(Request $request, Response $response, array $args): Response
     {
         $paquet = new Paquet();
-        $paquet->edit($id, $data);
-
-        return $response
-            ->withHeader('Location', '/')
-            ->withStatus(302);
-    } else {
-        $paquet = new Paquet();
-        $listPaquet = $paquet->getAll();
-
-        $livreur = new User();
-        $listLivreur = $livreur->getAllLivreur();
-
-        return $view->render($response, 'adminHome.php', [
-            'errors' => $errors,
-            'paquets' => $listPaquet,
-            'livreurs' => $listLivreur,
-            'openModal' => true
-        ]);
+        $paquet->livre((int)$args['id']);
+    
+        return $response->withHeader('Location', '/')->withStatus(302);
     }
-}
 
     public function deletePaquet(Request $request, Response $response, array $args): Response
     {

@@ -24,6 +24,7 @@ $app->group('/paquet', function (RouteCollectorProxy $group)
     $group->post('/add', [PaquetController::class, 'addPaquets'])->add(AuthMiddleware::class);
     $group->post('/edit/{id}', [PaquetController::class, 'editPaquets'])->add(AuthMiddleware::class);
     $group->post('/delete/{id}', [PaquetController::class, 'deletePaquet'])->add(AuthMiddleware::class);
+    $group->post('/livrer/{id}', [PaquetController::class, 'livrerPaquet'])->add(AuthMiddleware::class);
 });
 
 //login
